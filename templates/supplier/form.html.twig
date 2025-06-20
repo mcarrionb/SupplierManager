@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title|default('Añadir proveedor') }}{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <div class="card-title h2 text-center mb-4">{{ title|default('Añadir proveedor') }}</div>
+                <a href="{{ path('supplier_index') }}" class="btn btn-link mb-3"><i class="fas fa-arrow-left"></i> Volver al listado</a>
+                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                    <div class="row g-3">
+                        {% for field in form %}
+                            {% if field.vars.name != '_token' %}
+                                <div class="col-12 mb-3">
+                                    {% if field.vars.block_prefixes is defined and 'checkbox' in field.vars.block_prefixes %}
+                                        <div class="form-check">
+                                            {{ form_widget(field, {'attr': {'class': 'form-check-input' ~ (field.vars.errors|length > 0 ? ' is-invalid' : '') }}) }}
+                                            <label class="form-check-label" for="{{ field.vars.id }}">{{ field.vars.label|default(field.vars.name|capitalize) }}</label>
+                                            {% if field.vars.errors|length > 0 %}
+                                                <div class="invalid-feedback d-block">
+                                                    {{ field.vars.errors|first.message }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <label for="{{ field.vars.id }}" class="form-label">{{ field.vars.label|default(field.vars.name|capitalize) }}</label>
+                                        {{ form_widget(field, {'attr': {'class': 'form-control' ~ (field.vars.errors|length > 0 ? ' is-invalid' : '') }}) }}
+                                        {% if field.vars.errors|length > 0 %}
+                                            <div class="invalid-feedback">
+                                                {{ field.vars.errors|first.message }}
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

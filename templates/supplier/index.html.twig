@@ -1,0 +1,220 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Proveedores{% endblock %}
+
+{% block body %}
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <h1 class="card-title mb-4">Lista de proveedores</h1>
+        <div class="table-responsive d-none d-md-block">
+            <table id="suppliersTable" class="table table-striped table-hover table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Tipo</th>
+                        <th>Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" placeholder="Buscar nombre" class="form-control form-control-sm" /></th>
+                        <th><input type="text" placeholder="Buscar email" class="form-control form-control-sm" /></th>
+                        <th><input type="text" placeholder="Buscar teléfono" class="form-control form-control-sm" /></th>
+                        <th>
+                            <select class="form-control form-control-sm">
+                                <option value="">Todos</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="pista">Pista</option>
+                                <option value="complemento">Complemento</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select class="form-control form-control-sm" id="activoFilter">
+                                <option value="">Todos</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for supplier in suppliers %}
+                        <tr>
+                            <td>{{ supplier.name }}</td>
+                            <td>{{ supplier.email }}</td>
+                            <td>{{ supplier.phone }}</td>
+                            <td>{{ supplier.type|capitalize }}</td>
+                            <td>
+                                {% if supplier.active %}
+                                    <span class="badge badge-success badge-pill">Activo</span>
+                                {% else %}
+                                    <span class="badge badge-danger badge-pill">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('supplier_edit', { id: supplier.id }) }}" class="action-icon-btn" title="Editar" data-toggle="tooltip" data-placement="top" aria-label="Editar">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <form method="post"
+                                      action="{{ path('supplier_delete', { id: supplier.id }) }}"
+                                      style="display:inline;"
+                                      onsubmit="return false;" class="delete-form">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ supplier.id) }}">
+                                    <button type="button" class="action-icon-btn btn-delete" title="Eliminar" data-toggle="tooltip" data-placement="top" aria-label="Eliminar" data-supplier-id="{{ supplier.id }}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="d-block d-md-none">
+            <div class="mb-3">
+                <input type="text" id="mobileSupplierSearch" class="form-control" placeholder="Buscar proveedor...">
+            </div>
+            <div class="row" id="mobileSupplierCards">
+                {% for supplier in suppliers %}
+                    <div class="col-12 mb-3 supplier-card" data-name="{{ supplier.name|lower }}" data-email="{{ supplier.email|lower }}" data-phone="{{ supplier.phone|lower }}">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="card-title mb-0">{{ supplier.name }}</h5>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ path('supplier_edit', { id: supplier.id }) }}" class="action-icon-btn" title="Editar" data-toggle="tooltip" data-placement="top" aria-label="Editar">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                        <form method="post"
+                                              action="{{ path('supplier_delete', { id: supplier.id }) }}"
+                                              style="display:inline;"
+                                              onsubmit="return false;" class="delete-form">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ supplier.id) }}">
+                                            <button type="button" class="action-icon-btn btn-delete" title="Eliminar" data-toggle="tooltip" data-placement="top" aria-label="Eliminar" data-supplier-id="{{ supplier.id }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <p class="mb-1"><strong>Email:</strong> {{ supplier.email }}</p>
+                                <p class="mb-1"><strong>Teléfono:</strong> {{ supplier.phone }}</p>
+                                <p class="mb-1"><strong>Tipo:</strong> {{ supplier.type|capitalize }}</p>
+                                <p class="mb-2"><strong>Estado:</strong> {% if supplier.active %}<span class="badge badge-success badge-pill">Activo</span>{% else %}<span class="badge badge-danger badge-pill">Inactivo</span>{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmModalLabel">Confirmar eliminación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este proveedor?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Setup filters for text and select inputs
+        $('#suppliersTable thead tr:eq(1) th').each(function (i) {
+            if (i === 4) return; // Skip Activo column for default search, handled below
+            $('input, select', this).on('keyup change', function () {
+                const value = $(this).val();
+                if ($('#suppliersTable').DataTable().column(i).search() !== value) {
+                    $('#suppliersTable').DataTable().column(i).search(value).draw();
+                }
+            });
+        });
+        // Custom filter for Activo column
+        $('#activoFilter').on('change', function () {
+            var value = $(this).val();
+            if (value) {
+                $('#suppliersTable').DataTable().column(4).search('^' + value + '$', true, false).draw();
+            } else {
+                $('#suppliersTable').DataTable().column(4).search('', false, false).draw();
+            }
+        });
+        // Init DataTable with custom dom for layout
+        $('#suppliersTable').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            dom: "<'row mb-2'<'col-md-6 d-flex align-items-center'f><'col-md-6 d-flex justify-content-end'B>>rtip",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Descargar Excel',
+                    title: 'Proveedores',
+                    className: 'btn btn-success'
+                }
+            ],
+            orderCellsTop: true,
+            fixedHeader: true,
+            responsive: true
+        });
+        // Move the search label text inside the input for a cleaner look
+        $("#suppliersTable_filter label").each(function() {
+            var input = $(this).find('input');
+            input.attr('placeholder', 'Buscar en la tabla...');
+            $(this).contents().filter(function(){ return this.nodeType === 3; }).remove();
+        });
+        // Enable Bootstrap tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Delete confirmation modal logic
+        let formToDelete = null;
+        $(document).on('click', '.btn-delete', function () {
+            formToDelete = $(this).closest('form');
+            $('#deleteConfirmModal').modal('show');
+        });
+        $('#confirmDeleteBtn').on('click', function () {
+            if (formToDelete) {
+                formToDelete.submit();
+                formToDelete = null;
+                $('#deleteConfirmModal').modal('hide');
+            }
+        });
+
+        // Mobile card search (vanilla JS for compatibility)
+        document.getElementById('mobileSupplierSearch')?.addEventListener('input', function() {
+            var search = this.value.trim().toLowerCase();
+            var cards = document.querySelectorAll('#mobileSupplierCards .supplier-card');
+            cards.forEach(function(card) {
+                var name = card.getAttribute('data-name');
+                var email = card.getAttribute('data-email');
+                var phone = card.getAttribute('data-phone');
+                if (name.includes(search) || email.includes(search) || phone.includes(search)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block navbar_actions %}
+    <a href="{{ path('supplier_new') }}" class="btn btn-primary ml-auto d-flex align-items-center"><i class="fas fa-plus mr-2"></i> Añadir proveedor</a>
+{% endblock %}

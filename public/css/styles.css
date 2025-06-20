@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+body {
+    background: #f6f7fb;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    color: #232946;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(35,41,70,0.04);
+    border-radius: 0 0 1.25rem 1.25rem;
+}
+
+.card {
+    border-radius: 1.25rem;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(35,41,70,0.10);
+    border: none;
+    transition: box-shadow 0.2s;
+}
+.card:hover {
+    box-shadow: 0 8px 32px rgba(35,41,70,0.16);
+}
+
+.card-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #232946;
+    letter-spacing: 0.5px;
+}
+
+.table {
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 0;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(35,41,70,0.07);
+    font-size: 1.05rem;
+}
+.table thead th {
+    background: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 2px solid #e9ecef;
+    letter-spacing: 0.5px;
+    color: #232946;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f6f7fb;
+}
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+    transition: background 0.2s;
+}
+.table td, .table th {
+    vertical-align: middle;
+    padding: 0.85rem 1rem;
+}
+
+.badge {
+    background: #f1f3f4;
+    color: #495057;
+    border-radius: 1rem !important;
+    font-size: 0.85em;
+    font-weight: 500;
+    padding: 0.4em 0.9em;
+    letter-spacing: 0.2px;
+}
+.badge-success {
+    background: #e6f4ea !important;
+    color: #198754 !important;
+}
+.badge-danger {
+    background: #fbeaea !important;
+    color: #dc3545 !important;
+}
+
+/* Card list for mobile */
+@media (max-width: 767.98px) {
+    .card.h-100 {
+        border-radius: 1.1rem;
+        box-shadow: 0 2px 12px rgba(35,41,70,0.10);
+        margin-bottom: 1.2rem;
+        padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    }
+    .card-title {
+        font-size: 1.2rem;
+    }
+    .card-body {
+        padding: 1.2rem 1rem 1rem 1rem;
+    }
+}
+
+.action-icon-btn {
+    background: none;
+    border: none;
+    color: #adb5bd;
+    padding: 0.25rem 0.5rem;
+    font-size: 1.2rem;
+    transition: color 0.2s, transform 0.2s;
+    text-decoration: none !important;
+    border-radius: 50%;
+}
+.action-icon-btn:hover, .action-icon-btn:focus {
+    color: #007bff;
+    background: #f1f3f4;
+    outline: none;
+    text-decoration: none !important;
+    transform: scale(1.15);
+}
+
+/* Table search and filter row */
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    border-radius: 0.5rem;
+    border: 1px solid #e9ecef;
+    padding: 0.25rem 0.75rem;
+    background: #f8f9fa;
+}
+
+/* Toasts and notifications (optional) */
+.toast {
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #232946;
+    box-shadow: 0 2px 12px rgba(35,41,70,0.10);
+    font-size: 1rem;
+}
+
+/* Subtle transitions for cards and table rows */
+.card, .table tbody tr {
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.form-label, .form-check-label {
+    font-weight: 500;
+    color: #232946;
+}
+
+.form-control, .form-check-input {
+    border-radius: 0.5rem;
+}
+
+.btn-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+.btn-link:hover, .btn-link:focus {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.d-grid {
+    display: grid;
+} 

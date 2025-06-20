@@ -1,0 +1,34 @@
+services:
+###> doctrine/doctrine-bundle ###
+  database:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: supplier_manager_db
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3307:3306"
+    volumes:
+      - database_data:/var/lib/mysql:rw
+
+  app:
+    build: .
+    depends_on:
+      - database
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      DATABASE_URL: mysql://root:admin@database:3306/supplier_manager_db
+    volumes:
+      - ./:/var/www/html
+      - app_vendor:/var/www/html/vendor
+      - app_var:/var/www/html/var
+    ports:
+      - "8080:80"
+###< doctrine/doctrine-bundle ###
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+  app_vendor:
+  app_var:
+###< doctrine/doctrine-bundle ###
